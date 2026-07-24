@@ -11,7 +11,9 @@ export const Route = createFileRoute("/")({
 type Message = { role: "user" | "assistant" | "error"; content: string };
 
 // TODO: replace with your FastAPI base URL
-const API_URL = "http://localhost:8000";
+const API_URL = import.meta.env.VITE_API_URL;
+
+console.log("API_URL =", API_URL);
 
 function Index() {
   const [messages, setMessages] = useState<Message[]>([]);
