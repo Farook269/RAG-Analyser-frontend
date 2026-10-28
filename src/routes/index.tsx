@@ -64,13 +64,16 @@ function Index() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question: q }),
       });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      if (!res.ok) {
+        const errJson = await res.json().catch(() => null);
+        throw new Error(errJson?.detail || `HTTP ${res.status}`);
+      }
       const data = await res.json();
       setMessages((m) => [...m, { role: "assistant", content: data.answer ?? "" }]);
     } catch (e) {
       setMessages((m) => [
         ...m,
-        { role: "error", content: `Could not reach API: ${(e as Error).message}` },
+        { role: "error", content: `${(e as Error).message}` },
       ]);
     } finally {
       setIsLoading(false);
