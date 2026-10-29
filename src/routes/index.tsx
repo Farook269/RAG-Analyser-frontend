@@ -92,10 +92,20 @@ function Index() {
     }
   };
 
-  const clearChat = () => setMessages([]);
+  const clearChat = async () => {
+    setMessages([]);
+    try {
+      await fetch(`${API_URL}/clear`, { method: "POST" });
+      setFiles([]);
+    } catch {}
+  };
 
-  const removeFile = (name: string) =>
+  const removeFile = async (name: string) => {
     setFiles((f) => f.filter((x) => x.name !== name));
+    try {
+      await fetch(`${API_URL}/files/${encodeURIComponent(name)}`, { method: "DELETE" });
+    } catch {}
+  };
 
   return (
     <div className="min-h-screen w-full p-6 md:p-10">
